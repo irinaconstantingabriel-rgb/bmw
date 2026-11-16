@@ -1,0 +1,1572 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0f172a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Mecanic Virtual">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Mecanic Virtual</title>
+<style>
+:root{--bg:#0f172a;--s1:#1e293b;--s2:#263447;--border:#334155;--blue:#3b82f6;--indigo:#6366f1;--green:#10b981;--red:#ef4444;--yellow:#f59e0b;--orange:#f97316;--purple:#a855f7;--text:#e2e8f0;--muted:#94a3b8;--faint:#475569;--r:12px;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,'Segoe UI',system-ui,sans-serif;overflow:hidden;font-size:16px;}
+#app{display:flex;flex-direction:column;height:100vh;height:100dvh;}
+.hdr{background:linear-gradient(135deg,#1e3a5f,#16213e);padding:12px 16px 0;flex-shrink:0;border-bottom:1px solid var(--border);}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.hdr-title{font-size:19px;font-weight:800;letter-spacing:-.4px;}
+.hdr-sub{font-size:13px;color:var(--muted);}
+.svbdg{background:#16a34a22;color:#4ade80;border:1px solid #16a34a55;border-radius:8px;padding:3px 10px;font-size:12px;font-weight:700;opacity:0;transition:opacity .3s;}
+.svbdg.on{opacity:1;}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;padding-bottom:10px;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{flex-shrink:0;background:transparent;border:none;color:var(--faint);font-size:13px;font-weight:700;padding:7px 11px;border-radius:8px;cursor:pointer;white-space:nowrap;}
+.tab.on{background:var(--blue);color:#fff;}
+.body{flex:1;overflow-y:auto;padding:14px;-webkit-overflow-scrolling:touch;}
+.pg{display:none;}.pg.on{display:block;}
+.card{background:var(--s1);border-radius:var(--r);padding:16px;margin-bottom:12px;border:1px solid var(--border);}
+.ct{font-size:13px;font-weight:700;color:#93c5fd;margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;}
+.sg{display:grid;gap:8px;margin-bottom:12px;}
+.sg2{grid-template-columns:1fr 1fr;}
+.sg3{grid-template-columns:1fr 1fr 1fr;}
+.st{background:var(--s1);border-radius:var(--r);padding:13px 8px;text-align:center;border:1px solid var(--border);}
+.si{font-size:20px;margin-bottom:4px;}
+.sv2{font-size:16px;font-weight:800;}
+.sl{font-size:11px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.04em;}
+.f{margin-bottom:12px;}
+.f label{display:block;font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;}
+.f input,.f select,.f textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:15px;outline:none;font-family:inherit;}
+.f input:focus,.f select:focus,.f textarea:focus{border-color:var(--blue);}
+.hint{font-size:12px;color:var(--faint);margin-top:5px;line-height:1.4;}
+.date-wrap{display:flex;gap:6px;align-items:center;}
+.date-wrap input{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 8px;color:var(--text);font-size:15px;outline:none;text-align:center;min-width:0;}
+.date-wrap input:focus{border-color:var(--blue);}
+.date-wrap .dd{width:56px;flex-shrink:0;}
+.date-wrap .mm{width:56px;flex-shrink:0;}
+.date-wrap .yy{width:80px;flex-shrink:0;}
+.date-sep{color:var(--muted);font-size:18px;font-weight:700;flex-shrink:0;}
+.f textarea{resize:none;height:68px;}
+.f select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.btn{width:100%;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:4px;color:#fff;}
+.btn.blue{background:var(--blue);}
+.btn.sec{background:var(--s2);color:var(--muted);}
+.btn.grn{background:var(--green);}
+.btn.red{background:var(--red);}
+.btn.ind{background:var(--indigo);}
+.btn.org{background:var(--orange);}
+.btn.pur{background:var(--purple);}
+.btn.yel{background:var(--yellow);}
+.br{display:flex;gap:8px;margin-top:8px;}
+.br .btn{margin-top:0;}
+.item{background:var(--s1);border-radius:var(--r);padding:14px;margin-bottom:10px;border:1px solid var(--border);}
+.item.isdone{opacity:.55;}
+.item.isdone .itl{text-decoration:line-through;}
+.it{display:flex;gap:10px;align-items:flex-start;}
+.ii{font-size:22px;flex-shrink:0;margin-top:1px;}
+.inf{flex:1;min-width:0;word-break:break-word;}
+.itl{font-weight:700;font-size:15px;}
+.itm{font-size:13px;color:var(--muted);margin-top:3px;}
+.itd{font-size:13px;color:#94a3b8;margin-top:4px;}
+.ir{text-align:right;flex-shrink:0;}
+.ic{font-weight:800;font-size:14px;}
+.db{background:none;border:none;font-size:17px;cursor:pointer;color:var(--faint);padding:3px;}
+.bdg{display:inline-block;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700;margin-top:4px;}
+.ok{background:#e8f5e922;color:#4ade80;border:1px solid #16a34a33;}
+.wn{background:#fef08a22;color:#fde047;border:1px solid #ca8a0433;}
+.ug{background:#fca5a522;color:#f87171;border:1px solid #dc262633;}
+.fu{background:#fed7aa22;color:#fb923c;border:1px solid #ea580c33;}
+.ex{background:#e9d5ff22;color:#c084fc;border:1px solid #9333ea33;}
+.au{background:#38bdf822;color:#38bdf8;border:1px solid #0284c733;}
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.st2{font-size:15px;font-weight:700;}
+.ab{border:none;border-radius:8px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;color:#fff;}
+.pan{background:var(--s1);border-radius:var(--r);padding:16px;margin-bottom:12px;display:none;}
+.pan.on{display:block;}
+.pt{font-size:14px;font-weight:700;margin-bottom:14px;}
+.emp{background:var(--s1);border-radius:var(--r);padding:32px 16px;text-align:center;color:var(--faint);border:1px dashed var(--border);}
+.ei{font-size:34px;margin-bottom:8px;}
+.et{font-weight:700;font-size:15px;color:var(--muted);}
+.es{font-size:13px;margin-top:4px;}
+.rem-alert{background:linear-gradient(135deg,#7c3aed22,#6d28d922);border:1px solid #7c3aed55;border-radius:var(--r);padding:14px;margin-bottom:10px;}
+.rem-title{font-size:13px;font-weight:700;color:#c4b5fd;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em;}
+.bk-alert{background:#f59e0b18;border:1px solid #f59e0b55;border-radius:var(--r);padding:12px 14px;margin-bottom:10px;display:flex;align-items:center;gap:12px;justify-content:space-between;}
+.bk-alert div{font-size:13px;color:#fde68a;line-height:1.5;}
+.chart-wrap{overflow-x:auto;margin-top:8px;}
+.chart{display:flex;align-items:flex-end;gap:6px;height:110px;min-width:100%;}
+.bar-g{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;min-width:38px;}
+.bar{border-radius:4px 4px 0 0;width:100%;min-height:3px;}
+.bar-l{font-size:10px;color:var(--muted);text-align:center;}
+.bar-v{font-size:10px;color:var(--text);font-weight:700;text-align:center;}
+.div{height:1px;background:var(--border);margin:14px 0;}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1e293b;color:#fff;border-radius:12px;padding:12px 20px;font-size:14px;font-weight:600;border:1px solid var(--border);transition:transform .3s;z-index:999;white-space:nowrap;pointer-events:none;box-shadow:0 8px 32px rgba(0,0,0,.4);max-width:92vw;overflow:hidden;text-overflow:ellipsis;}
+#toast.on{transform:translateX(-50%) translateY(0);}
+.sumg{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.sumi{background:rgba(15,23,42,.5);border-radius:8px;padding:10px 12px;}
+.sumk{font-size:11px;color:var(--muted);margin-bottom:2px;text-transform:uppercase;letter-spacing:.04em;}
+.sumv{font-size:14px;font-weight:700;}
+.autocomplete-wrap{position:relative;}
+.autocomplete-list{position:absolute;top:100%;left:0;right:0;background:#1e293b;border:1px solid #3b82f6;border-radius:8px;z-index:100;max-height:160px;overflow-y:auto;margin-top:2px;display:none;}
+.autocomplete-list.open{display:block;}
+.autocomplete-item{padding:10px 12px;font-size:14px;color:#e2e8f0;cursor:pointer;border-bottom:1px solid #334155;}
+.autocomplete-item:last-child{border-bottom:none;}
+.autocomplete-item:hover,.autocomplete-item.active{background:#263447;color:#38bdf8;}
+.rep-section{margin-bottom:20px;}
+.rep-title{font-size:14px;font-weight:700;color:#93c5fd;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.consum-card{background:linear-gradient(135deg,#064e3b22,#065f4622);border:1px solid #059669;border-radius:var(--r);padding:14px;margin-bottom:10px;}
+.consum-val{font-size:30px;font-weight:800;color:#4ade80;}
+.consum-sub{font-size:13px;color:#94a3b8;margin-top:3px;}
+.tbl{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;}
+.tbl th{background:#1e3a5f;color:#93c5fd;padding:9px 10px;text-align:left;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;}
+.tbl td{padding:9px 10px;border-bottom:1px solid #1e293b;color:var(--text);vertical-align:top;}
+.tbl tr:hover td{background:#1e293b55;}
+.tbl-wrap{overflow-x:auto;border-radius:var(--r);border:1px solid var(--border);}
+.cat-tag{display:inline-block;background:#1e3a5f;color:#93c5fd;border:1px solid #3b82f633;border-radius:6px;padding:2px 8px;font-size:11px;margin:2px 2px 2px 0;cursor:pointer;}
+.cat-tag:hover{background:#2d4a7a;}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="hdr">
+    <div class="hdr-top">
+      <div>
+        <div class="hdr-title">🔧 Mecanic Virtual</div>
+        <div class="hdr-sub" id="hsub">Configurează mașina ta</div>
+      </div>
+      <div class="svbdg" id="svbdg">✓ Salvat</div>
+    </div>
+    <div class="tabs">
+      <button class="tab on" onclick="go('dash')">📊 Tablou</button>
+      <button class="tab" onclick="go('svc')">🔧 Service</button>
+      <button class="tab" onclick="go('fuel')">⛽ Combustibil</button>
+      <button class="tab" onclick="go('exp')">💸 Cheltuieli</button>
+      <button class="tab" onclick="go('rem')">🔔 Remindere</button>
+      <button class="tab" onclick="go('rep')">📊 Rapoarte</button>
+      <button class="tab" onclick="go('car')">🚗 Mașina</button>
+      <button class="tab" onclick="go('drv')">☁️ Drive</button>
+      <button class="tab" onclick="go('set')">⚙️ Setări</button>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <!-- DASHBOARD -->
+    <div class="pg on" id="pg-dash">
+      <div id="bk-alert"></div>
+      <div id="rem-alerts"></div>
+      <div class="sg sg3" id="dash-stats"></div>
+      <div class="sh"><div class="st2">Service recent</div><button class="ab" style="background:var(--blue)" onclick="go('svc');openPan('svc-pan')">+ Adaugă</button></div>
+      <div id="dash-svc"></div>
+      <div class="div"></div>
+      <div class="sh"><div class="st2">Alimentări recente</div><button class="ab" style="background:var(--orange)" onclick="go('fuel');openPan('fuel-pan')">+ Adaugă</button></div>
+      <div id="dash-fuel"></div>
+      <div class="div"></div>
+      <div class="sh"><div class="st2">Cheltuieli recente</div><button class="ab" style="background:var(--purple)" onclick="go('exp');openPan('exp-pan')">+ Adaugă</button></div>
+      <div id="dash-exp"></div>
+    </div>
+
+    <!-- SERVICE -->
+    <div class="pg" id="pg-svc">
+      <div class="sh"><div class="st2" id="svc-cnt">Intervenții service</div><button class="ab" style="background:var(--blue)" onclick="openPan('svc-pan')">+ Adaugă</button></div>
+      <div class="pan" id="svc-pan" style="border:1px solid var(--blue)">
+        <div class="pt" style="color:#93c5fd">🔧 Intervenție nouă</div>
+        <div class="f"><label>Dată (zz/ll/aaaa)</label>
+          <div class="date-wrap">
+            <input class="dd" type="number" id="sv-dd" placeholder="zz" min="1" max="31">
+            <span class="date-sep">/</span>
+            <input class="mm" type="number" id="sv-mm" placeholder="ll" min="1" max="12">
+            <span class="date-sep">/</span>
+            <input class="yy" type="number" id="sv-yy" placeholder="aaaa" min="2000" max="2100">
+          </div></div>
+        <div class="f"><label>Km</label><input type="number" id="sv-km" placeholder="ex: 85000" style="width:100%"></div>
+        <div class="f">
+          <label>Categorie</label>
+          <select id="sv-cat"></select>
+          <div style="margin-top:8px;"><span style="font-size:12px;color:var(--muted);">Categorii personalizate:</span><div id="custom-cats" style="margin-top:6px;"></div></div>
+          <div style="display:flex;gap:8px;margin-top:8px;">
+            <input type="text" id="new-cat-input" placeholder="Adaugă categorie nouă..." style="flex:1;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px 11px;color:var(--text);font-size:14px;outline:none;">
+            <button onclick="addCustomCat()" style="background:var(--blue);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;">+ Adaugă</button>
+          </div>
+        </div>
+        <div class="f"><label>Descriere</label><textarea id="sv-desc" placeholder="Detalii..."></textarea></div>
+        <div class="g2">
+          <div class="f"><label>Cost (RON)</label><input type="number" id="sv-cost" placeholder="0"></div>
+          <div class="f"><label>Status</label><select id="sv-urg"><option>Ok</option><option>Atenție</option><option>Urgent</option></select></div>
+        </div>
+        <div class="f"><label>Service / Garaj</label>
+          <div class="autocomplete-wrap">
+            <input type="text" id="sv-shop" placeholder="Nume service..." autocomplete="off" oninput="acShow('sv-shop','ac-shop',getShops())" onfocus="acShow('sv-shop','ac-shop',getShops())" onblur="setTimeout(()=>acHide('ac-shop'),200)">
+            <div class="autocomplete-list" id="ac-shop"></div>
+          </div>
+        </div>
+        <div class="f"><label>Următoarea intervenție — peste cât timp?</label>
+          <div class="g2">
+            <input type="number" id="sv-nm" min="0" placeholder="ex: 12" style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:15px;outline:none;width:100%">
+            <select id="sv-nmu"><option value="m">luni</option><option value="y">ani</option></select>
+          </div>
+          <div style="margin-top:6px">
+            <span class="cat-tag" onclick="setNext('t',6,'m')">6 luni</span><span class="cat-tag" onclick="setNext('t',12,'m')">12 luni</span><span class="cat-tag" onclick="setNext('t',2,'y')">2 ani</span>
+          </div>
+        </div>
+        <div class="f"><label>…și/sau după câți km?</label>
+          <input type="number" id="sv-nk" placeholder="ex: 10000">
+          <div style="margin-top:6px">
+            <span class="cat-tag" onclick="setNext('k',5000)">5.000</span><span class="cat-tag" onclick="setNext('k',10000)">10.000</span><span class="cat-tag" onclick="setNext('k',15000)">15.000</span><span class="cat-tag" onclick="setNext('k',20000)">20.000</span>
+          </div>
+          <div class="hint" id="sv-prev" style="margin-top:8px">Lasă gol dacă nu vrei reminder.</div>
+          <div class="hint">Se calculează față de data și km de mai sus. Reminderul apare când ajungi la prima dintre cele două scadențe.</div>
+        </div>
+        <div class="br">
+          <button class="btn sec" style="flex:1" onclick="closePan('svc-pan')">Anulează</button>
+          <button class="btn blue" style="flex:2" onclick="addSvc()">✓ Salvează</button>
+        </div>
+      </div>
+      <div id="svc-list"></div>
+    </div>
+
+    <!-- FUEL -->
+    <div class="pg" id="pg-fuel">
+      <div id="consum-display"></div>
+      <div id="consum-chart"></div>
+      <div class="sg sg2" id="fuel-stats"></div>
+      <div class="sh"><div class="st2" id="fuel-cnt">Alimentări</div><button class="ab" style="background:var(--orange)" onclick="openPan('fuel-pan')">+ Adaugă</button></div>
+      <div class="pan" id="fuel-pan" style="border:1px solid var(--orange)">
+        <div class="pt" style="color:#fb923c">⛽ Alimentare nouă</div>
+        <div class="f"><label>Dată (zz/ll/aaaa)</label>
+          <div class="date-wrap">
+            <input class="dd" type="number" id="ff-dd" placeholder="zz" min="1" max="31">
+            <span class="date-sep">/</span>
+            <input class="mm" type="number" id="ff-mm" placeholder="ll" min="1" max="12">
+            <span class="date-sep">/</span>
+            <input class="yy" type="number" id="ff-yy" placeholder="aaaa" min="2000" max="2100">
+          </div></div>
+        <div class="f"><label>Km odometru</label><input type="number" id="ff-km" placeholder="ex: 85000" style="width:100%"></div>
+        <div class="g2">
+          <div class="f"><label>Litri</label><input type="number" id="ff-litri" placeholder="ex: 40" step="0.01" oninput="calcPret()"></div>
+          <div class="f"><label>Cost total (RON)</label><input type="number" id="ff-cost" placeholder="ex: 280" step="0.01" oninput="calcPret()"></div>
+        </div>
+        <div class="g2">
+          <div class="f"><label>Preț/litru (RON)</label><input type="number" id="ff-pret" placeholder="auto-calculat" step="0.001" readonly style="opacity:.7"></div>
+          <div class="f"><label>Tip combustibil</label>
+            <select id="ff-tip"><option>Benzină</option><option>Diesel</option><option>GPL</option><option>AdBlue</option></select>
+          </div>
+        </div>
+        <div class="f"><label>Stație</label>
+          <div class="autocomplete-wrap">
+            <input type="text" id="ff-stat" placeholder="ex: Petrom, OMV, Rompetrol..." autocomplete="off" oninput="acShow('ff-stat','ac-stat',getFuelStations())" onfocus="acShow('ff-stat','ac-stat',getFuelStations())" onblur="setTimeout(()=>acHide('ac-stat'),200)">
+            <div class="autocomplete-list" id="ac-stat"></div>
+          </div></div>
+        <div class="f"><label>Plin complet?</label>
+          <select id="ff-plin"><option value="1">✅ Da — plin complet</option><option value="0">⚡ Nu — parțial</option></select>
+        </div>
+        <div class="f"><label>Notă</label><input type="text" id="ff-nota" placeholder="opțional..."></div>
+        <div class="br">
+          <button class="btn sec" style="flex:1" onclick="closePan('fuel-pan')">Anulează</button>
+          <button class="btn org" style="flex:2" onclick="addFuel()">✓ Salvează</button>
+        </div>
+      </div>
+      <div id="fuel-list"></div>
+    </div>
+
+    <!-- CHELTUIELI -->
+    <div class="pg" id="pg-exp">
+      <div class="sg sg2" id="exp-stats"></div>
+      <div class="sh"><div class="st2" id="exp-cnt">Cheltuieli extra</div><button class="ab" style="background:var(--purple)" onclick="openPan('exp-pan')">+ Adaugă</button></div>
+      <div class="pan" id="exp-pan" style="border:1px solid var(--purple)">
+        <div class="pt" style="color:#c084fc">💸 Cheltuială nouă</div>
+        <div class="g2">
+          <div class="f"><label>Dată (zz/ll/aaaa)</label>
+          <div class="date-wrap">
+            <input class="dd" type="number" id="ex-dd" placeholder="zz" min="1" max="31">
+            <span class="date-sep">/</span>
+            <input class="mm" type="number" id="ex-mm" placeholder="ll" min="1" max="12">
+            <span class="date-sep">/</span>
+            <input class="yy" type="number" id="ex-yy" placeholder="aaaa" min="2000" max="2100">
+          </div></div>
+          <div class="f"><label>Cost (RON)</label><input type="number" id="ex-cost" placeholder="0"></div>
+        </div>
+        <div class="f"><label>Categorie</label>
+          <select id="ex-cat"></select>
+        </div>
+        <div class="f"><label>Descriere</label><input type="text" id="ex-desc" placeholder="Detalii..."></div>
+        <div class="f"><label>Scadență (opțional, zz/ll/aaaa)</label>
+        <div class="date-wrap">
+            <input class="dd" type="number" id="ex-scad-dd" placeholder="zz" min="1" max="31">
+            <span class="date-sep">/</span>
+            <input class="mm" type="number" id="ex-scad-mm" placeholder="ll" min="1" max="12">
+            <span class="date-sep">/</span>
+            <input class="yy" type="number" id="ex-scad-yy" placeholder="aaaa" min="2000" max="2100">
+          </div>
+          <div class="hint">🔔 Pentru RCA, CASCO, ITP și Rovignetă, scadența creează automat un reminder (cu 14 zile înainte).</div></div>
+        <div class="br">
+          <button class="btn sec" style="flex:1" onclick="closePan('exp-pan')">Anulează</button>
+          <button class="btn pur" style="flex:2" onclick="addExp()">✓ Salvează</button>
+        </div>
+      </div>
+      <div id="exp-list"></div>
+    </div>
+
+    <!-- REMINDERE -->
+    <div class="pg" id="pg-rem">
+      <div class="sh"><div class="st2">Remindere</div><button class="ab" style="background:var(--yellow);color:#000" onclick="openPan('rem-pan')">+ Adaugă</button></div>
+      <div class="pan" id="rem-pan" style="border:1px solid var(--yellow)">
+        <div class="pt" style="color:#fde047">🔔 Reminder nou</div>
+        <div class="f"><label>Titlu</label><input type="text" id="rm-title" placeholder="ex: Schimb ulei, ITP..."></div>
+        <div class="g2">
+          <div class="f"><label>Dată scadentă (zz/ll/aaaa)</label>
+          <div class="date-wrap">
+            <input class="dd" type="number" id="rm-dd" placeholder="zz" min="1" max="31">
+            <span class="date-sep">/</span>
+            <input class="mm" type="number" id="rm-mm" placeholder="ll" min="1" max="12">
+            <span class="date-sep">/</span>
+            <input class="yy" type="number" id="rm-yy" placeholder="aaaa" min="2000" max="2100">
+          </div></div>
+          <div class="f"><label>La km (opțional)</label><input type="number" id="rm-km" placeholder="ex: 90000"></div>
+        </div>
+        <div class="f"><label>Avertizează cu (zile înainte)</label>
+          <select id="rm-warn"><option value="3">3 zile</option><option value="7" selected>7 zile</option><option value="14">14 zile</option><option value="30">30 de zile</option></select>
+        </div>
+        <div class="f"><label>Notă</label><input type="text" id="rm-nota" placeholder="opțional..."></div>
+        <div class="br">
+          <button class="btn sec" style="flex:1" onclick="closePan('rem-pan')">Anulează</button>
+          <button class="btn yel" style="flex:2;color:#000" onclick="addRem()">✓ Salvează</button>
+        </div>
+      </div>
+      <div id="rem-list"></div>
+    </div>
+
+    <!-- RAPOARTE -->
+    <div class="pg" id="pg-rep">
+      <div class="card">
+        <div class="ct">📊 Filtru raport</div>
+        <div class="g2">
+          <div class="f"><label>De la</label><input type="date" id="rep-from"></div>
+          <div class="f"><label>Până la</label><input type="date" id="rep-to"></div>
+        </div>
+        <div class="f"><label>Perioadă rapidă</label>
+          <select id="rep-quick" onchange="setRepPeriod()">
+            <option value="">Personalizat</option>
+            <option value="month">Luna aceasta</option>
+            <option value="last3">Ultimele 3 luni</option>
+            <option value="last6">Ultimele 6 luni</option>
+            <option value="year">Anul acesta</option>
+            <option value="all">Toate datele</option>
+          </select>
+        </div>
+        <div class="g2">
+          <div class="f"><label>Tip raport</label>
+            <select id="rep-type">
+              <option value="all">Complet</option>
+              <option value="svc">Doar Service</option>
+              <option value="fuel">Doar Combustibil</option>
+              <option value="exp">Doar Cheltuieli</option>
+            </select>
+          </div>
+          <div class="f"><label>Categorie</label>
+            <select id="rep-cat"></select>
+          </div>
+        </div>
+        <div class="hint" style="margin:-4px 0 8px">Dacă alegi o categorie, raportul arată doar acea categorie.</div>
+        <div class="br">
+          <button class="btn blue" style="flex:2" onclick="genRep()">📊 Generează raport</button>
+          <button class="btn pur" style="flex:1" onclick="repPDF()">📄 PDF</button>
+        </div>
+      </div>
+      <div id="rep-out"></div>
+    </div>
+
+    <!-- MAȘINA -->
+    <div class="pg" id="pg-car">
+      <div class="card">
+        <div class="ct">Informații mașină</div>
+        <div class="g2">
+          <div class="f"><label>Marcă</label><input type="text" id="c-brand" placeholder="ex: Dacia" oninput="saveCar()"></div>
+          <div class="f"><label>Model</label><input type="text" id="c-model" placeholder="ex: Logan" oninput="saveCar()"></div>
+          <div class="f"><label>An</label><input type="number" id="c-year" placeholder="ex: 2018" oninput="saveCar()"></div>
+          <div class="f"><label>Km actuali</label><input type="number" id="c-km" placeholder="ex: 95000" oninput="saveCar()"></div>
+        </div>
+        <div class="hint" style="margin:-6px 0 12px">Kilometrajul se actualizează automat din alimentări și service (se ia cel mai mare).</div>
+        <div class="f"><label>Combustibil</label>
+          <select id="c-fuel" onchange="saveCar()"><option value="">Alege...</option><option>Benzină</option><option>Diesel</option><option>GPL</option><option>Electric</option><option>Hibrid</option></select>
+        </div>
+        <div class="g2">
+          <div class="f"><label>Nr. înmatriculare</label><input type="text" id="c-plate" placeholder="B 123 XYZ" oninput="saveCar()"></div>
+          <div class="f"><label>Serie șasiu (VIN)</label><input type="text" id="c-vin" placeholder="opțional" oninput="saveCar()"></div>
+        </div>
+        <div class="f"><label>Capacitate rezervor (L)</label><input type="number" id="c-tank" placeholder="ex: 50" oninput="saveCar()"></div>
+      </div>
+      <div id="car-sum"></div>
+    </div>
+
+    <!-- DRIVE -->
+    <div class="pg" id="pg-drv">
+      <div style="background:linear-gradient(135deg,#064e3b22,#065f4622);border:1px solid #059669;border-radius:var(--r);padding:16px;margin-bottom:12px;">
+        <div class="ct" style="color:#4ade80">☁️ Google Drive (CSV)</div>
+        <label style="font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em;display:block;">URL Google Apps Script</label>
+        <input style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;font-family:monospace;margin:8px 0 10px;" id="drv-url" placeholder="https://script.google.com/macros/s/..." oninput="saveDriveUrl()">
+        <button class="btn grn" onclick="expDrive()">💾 Trimite CSV pe Google Drive</button>
+      </div>
+      <div class="card">
+        <div class="ct">📥 Export local</div>
+        <button class="btn ind" onclick="expCSV()" style="margin-bottom:8px">⬇️ Descarcă CSV complet</button>
+        <button class="btn pur" onclick="repPDF()">📄 Generează raport PDF</button>
+      </div>
+    </div>
+
+    <!-- SETĂRI -->
+    <div class="pg" id="pg-set">
+      <div style="background:linear-gradient(135deg,#064e3b22,#065f4622);border:1px solid #059669;border-radius:var(--r);padding:16px;margin-bottom:12px;">
+        <div class="ct" style="color:#4ade80">☁️ Backup complet pe Google Drive</div>
+        <p style="font-size:14px;color:var(--muted);margin-bottom:8px;">Salvează <strong style="color:var(--text)">toate datele</strong> ca fișier JSON. Poți restaura oricând pe orice telefon.</p>
+        <p id="bk-status" style="font-size:13px;font-weight:700;margin-bottom:12px;"></p>
+        <button class="btn grn" onclick="backupAndOpenDrive()" style="margin-bottom:8px">☁️ Descarcă JSON + Deschide Google Drive</button>
+        <button class="btn ind" onclick="backupLocal()">⬇️ Descarcă backup local (JSON)</button>
+      </div>
+      <div style="background:linear-gradient(135deg,#1e3a5f22,#1a1a3e33);border:1px solid #3b82f655;border-radius:var(--r);padding:16px;margin-bottom:12px;">
+        <div class="ct" style="color:#93c5fd">📥 Restaurare date</div>
+        <p style="font-size:14px;color:var(--muted);margin-bottom:12px;">Importă fișier JSON backup. <strong style="color:#f87171">Va înlocui datele existente!</strong></p>
+        <label style="font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;display:block;margin-bottom:6px;">Selectează fișierul .json</label>
+        <input type="file" id="import-file" accept=".json" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;margin-bottom:10px;">
+        <button class="btn blue" onclick="importBackup()">📥 Importă și restaurează</button>
+      </div>
+      <div style="background:linear-gradient(135deg,#7c3aed22,#6d28d922);border:1px solid #7c3aed55;border-radius:var(--r);padding:16px;margin-bottom:12px;">
+        <div class="ct" style="color:#c4b5fd">🔔 Notificări remindere</div>
+        <p style="font-size:14px;color:var(--muted);margin-bottom:8px;">Primești o notificare când un reminder devine scadent (după dată sau km). Apare când deschizi aplicația, cel mult o dată pe zi.</p>
+        <p id="notif-status" style="font-size:13px;font-weight:700;margin-bottom:12px;"></p>
+        <button class="btn pur" onclick="enableNotif()">🔔 Activează notificările</button>
+      </div>
+      <div class="card">
+        <div class="ct">ℹ️ Ghid backup</div>
+        <div style="font-size:14px;color:var(--muted);line-height:1.9;">
+          <div style="margin-bottom:8px;"><strong style="color:var(--text)">Înainte să schimbi telefonul:</strong><br>Apasă "Descarcă JSON + Deschide Google Drive", apoi urcă fișierul în Drive.</div>
+          <div style="margin-bottom:8px;"><strong style="color:var(--text)">Pe telefonul nou:</strong><br>1. Instalează aplicația<br>2. Descarcă fișierul JSON din Drive<br>3. Setări → Selectează fișierul → Importă</div>
+          <div><strong style="color:#4ade80">✅ Recomandare:</strong> backup lunar. Aplicația te avertizează după 30 de zile.</div>
+        </div>
+      </div>
+      <div style="background:#7f1d1d22;border:1px solid #ef444455;border-radius:var(--r);padding:16px;margin-bottom:12px;">
+        <div class="ct" style="color:#f87171">⚠️ Zonă periculoasă</div>
+        <p style="font-size:14px;color:var(--muted);margin-bottom:12px;">Șterge toate datele. <strong style="color:#f87171">Ireversibil!</strong></p>
+        <button class="btn red" onclick="resetAll()">🗑️ Șterge toate datele</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div id="toast"></div>
+
+<script>
+// ── HELPERS ───────────────────────────────────────────────────────────
+const $=id=>document.getElementById(id);
+
+// Escape pentru orice text introdus de utilizator înainte de innerHTML
+function esc(s){
+  return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function pad2(n){return String(n).padStart(2,'0');}
+// Data locală yyyy-mm-dd (toISOString dă data UTC și poate fi cu o zi în urmă)
+function localISO(d){return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());}
+// Parsează yyyy-mm-dd ca dată locală (nu UTC)
+function parseD(s){
+  if(!s)return null;
+  const p=String(s).split('-');
+  if(p.length!==3)return null;
+  const d=new Date(+p[0],+p[1]-1,+p[2]);
+  return isNaN(d)?null:d;
+}
+function startOfToday(){const t=new Date();t.setHours(0,0,0,0);return t;}
+function daysTo(s){const d=parseD(s);return d?Math.round((d-startOfToday())/86400000):null;}
+function zile(n){
+  if(n===1)return'1 zi';
+  const m=n%100;
+  return (m===0||m>=20)?n+' de zile':n+' zile';
+}
+function agoTxt(days){return days===0?'azi':days===1?'ieri':'acum '+zile(days);}
+
+function fmtDate(d){
+  if(!d)return'';
+  const p=String(d).split('-');
+  if(p.length!==3)return d;
+  return p[2]+'/'+p[1]+'/'+p[0];
+}
+
+// Citește câmpurile zz/ll/aaaa. Returnează {empty, ok, val(yyyy-mm-dd)}; validează și zilele din lună (ex. 31/02)
+function dateState(prefix){
+  const dd=$(prefix+'-dd').value,mm=$(prefix+'-mm').value,yy=$(prefix+'-yy').value;
+  if(dd===''&&mm===''&&yy==='')return{empty:true,ok:false,val:''};
+  const d=+dd,m=+mm,y=+yy;
+  const t=new Date(y,m-1,d);
+  const ok=Number.isInteger(d)&&Number.isInteger(m)&&Number.isInteger(y)&&y>=2000&&y<=2100&&m>=1&&m<=12&&d>=1
+    &&t.getFullYear()===y&&t.getMonth()===m-1&&t.getDate()===d;
+  return{empty:false,ok,val:ok?`${y}-${pad2(m)}-${pad2(d)}`:''};
+}
+
+function setDateVal(prefix,d){
+  ['dd','mm','yy'].forEach(s=>{const el=$(prefix+'-'+s);if(el)el.value='';});
+  if(!d)return;
+  let dd,mm,yy;
+  if(d.includes('-')){const p=d.split('-');yy=p[0];mm=p[1];dd=p[2];}
+  else if(d.includes('/')){const p=d.split('/');dd=p[0];mm=p[1];yy=p[2];}
+  else return;
+  $(prefix+'-dd').value=parseInt(dd)||'';
+  $(prefix+'-mm').value=parseInt(mm)||'';
+  $(prefix+'-yy').value=parseInt(yy)||'';
+}
+function setTodayVal(prefix){
+  const now=new Date();
+  $(prefix+'-dd').value=now.getDate();
+  $(prefix+'-mm').value=now.getMonth()+1;
+  $(prefix+'-yy').value=now.getFullYear();
+}
+
+const ICONS={
+  'Schimb ulei':'🛢️','Anvelope':'🔄','Frâne':'🔧','Filtru aer':'💨','Filtru combustibil':'🔩',
+  'Baterie':'🔋','Revizie generală':'🔩','Distribuție':'⚙️','Amortizoare':'🚗',
+  'Caroserie':'🚙','ITP':'📋','Alt serviciu':'🔧',
+  'Asigurare RCA':'🛡️','Asigurare CASCO':'🛡️','Rovignetă':'🛣️',
+  'Parcare':'🅿️','Taxe drumuri':'🛣️','Spălătorie':'🧼','Amenzi':'📋','Altele':'💳'
+};
+const DEFAULT_CATS=['Schimb ulei','Anvelope','Frâne','Filtru aer','Filtru combustibil','Baterie','Revizie generală','Distribuție','Amortizoare','Caroserie','ITP','Alt serviciu'];
+const EXP_CATS=['Asigurare RCA','Asigurare CASCO','ITP','Rovignetă','Parcare','Taxe drumuri','Spălătorie','Amenzi','Altele'];
+const AUTO_EXP=['Asigurare RCA','Asigurare CASCO','ITP','Rovignetă'];
+const FUEL_TYPES=['Benzină','Diesel','GPL','AdBlue'];
+const BK_DAYS=30;
+
+let car={brand:'',model:'',year:'',km:'',fuel:'',plate:'',vin:'',tank:''};
+let svcs=[],fuels=[],exps=[],rems=[],driveUrl='',lastBackup='';
+let customCats=[];
+
+function load(){
+  try{
+    const d=JSON.parse(localStorage.getItem('mv5')||'{}');
+    if(!d.version){
+      const old=JSON.parse(localStorage.getItem('mv4')||'{}');
+      if(old.car)car=old.car;
+      if(old.svcs)svcs=old.svcs;
+      if(old.fuels)fuels=old.fuels;
+      if(old.exps)exps=old.exps;
+      if(old.rems)rems=old.rems;
+      if(old.driveUrl)driveUrl=old.driveUrl;
+    } else {
+      if(d.car)car=d.car;
+      if(d.svcs)svcs=d.svcs;
+      if(d.fuels)fuels=d.fuels;
+      if(d.exps)exps=d.exps;
+      if(d.rems)rems=d.rems;
+      if(d.driveUrl)driveUrl=d.driveUrl;
+      if(d.customCats)customCats=d.customCats;
+      if(d.lastBackup)lastBackup=d.lastBackup;
+    }
+  }catch(e){}
+  refreshAutoRems();
+}
+
+function save(){
+  try{
+    refreshAutoRems();
+    localStorage.setItem('mv5',JSON.stringify({version:2,car,svcs,fuels,exps,rems,driveUrl,customCats,lastBackup}));
+    const b=$('svbdg');
+    b.classList.add('on');setTimeout(()=>b.classList.remove('on'),1800);
+  }catch(e){toast('❌ Nu s-a putut salva! Fă backup acum.');}
+}
+
+// ── KM ACTUALI (automat) ──────────────────────────────────────────────
+function curKm(){
+  const ks=[parseInt(car.km)||0,...svcs.map(r=>parseInt(r.km)||0),...fuels.map(f=>parseInt(f.km)||0)];
+  return Math.max(...ks);
+}
+function syncKm(){
+  const k=curKm();
+  if(k>(parseInt(car.km)||0))car.km=String(k);
+}
+
+// ── REMINDERE AUTOMATE ────────────────────────────────────────────────
+// Se reconstruiesc la fiecare salvare din cele mai recente date (RCA/CASCO/ITP/Rovignetă și "următoarea intervenție la km")
+function refreshAutoRems(){
+  const old={};
+  rems.filter(r=>r.auto).forEach(r=>old[r.id]=r);
+  const manual=rems.filter(r=>!r.auto);
+  const auto=[];
+  AUTO_EXP.forEach(cat=>{
+    const l=exps.filter(e=>e.cat===cat&&e.scad).sort((a,b)=>b.scad.localeCompare(a.scad))[0];
+    if(l){
+      const id='auto-exp-'+cat,o=old[id];
+      auto.push({id,auto:true,title:cat+' — expiră',date:l.scad,km:'',nota:l.desc||'',warn:14,done:!!(o&&o.done&&o.date===l.scad)});
+    }
+  });
+  const cats=[...new Set(svcs.filter(r=>r.nextKm||r.nextDate).map(r=>r.category))];
+  cats.forEach(cat=>{
+    const l=svcs.filter(r=>r.category===cat).sort((a,b)=>b.date.localeCompare(a.date)||((parseInt(b.km)||0)-(parseInt(a.km)||0)))[0];
+    if(l&&(l.nextKm||l.nextDate)){
+      const id='auto-svc-'+cat,o=old[id];
+      const nd=l.nextDate||'',nk=l.nextKm?String(l.nextKm):'';
+      auto.push({id,auto:true,title:cat+' — următoarea intervenție',date:nd,km:nk,nota:'',warn:14,done:!!(o&&o.done&&(o.date||'')===nd&&String(o.km||'')===nk)});
+    }
+  });
+  rems=[...manual,...auto];
+}
+
+function remStatus(r){
+  if(r.done)return{rank:-1,cls:'ok',txt:'✔ Făcut'};
+  const cands=[];
+  const warn=r.warn||7;
+  const dl=r.date?daysTo(r.date):null;
+  if(dl!==null){
+    if(dl<0)cands.push({rank:2,cls:'ug',txt:`⚠️ Scadent de ${zile(-dl)}`});
+    else if(dl===0)cands.push({rank:2,cls:'ug',txt:'⚠️ Scadent azi'});
+    else if(dl<=warn)cands.push({rank:1,cls:'wn',txt:`⏰ În ${zile(dl)}`});
+    else cands.push({rank:0,cls:'ok',txt:`✅ Peste ${zile(dl)}`});
+  }
+  const rk=parseInt(r.km)||0;
+  if(rk){
+    const left=rk-curKm();
+    if(left<=0)cands.push({rank:2,cls:'ug',txt:`⚠️ Km depășiți cu ${-left}`});
+    else if(left<=1000)cands.push({rank:1,cls:'wn',txt:`⏰ Mai sunt ${left} km`});
+    else cands.push({rank:0,cls:'ok',txt:`✅ Mai sunt ${left} km`});
+  }
+  if(!cands.length)return{rank:0,cls:'ok',txt:'✅ Ok'};
+  return cands.sort((a,b)=>b.rank-a.rank)[0];
+}
+
+// ── CATEGORII CUSTOM SERVICE ──────────────────────────────────────────
+function allCats(){return[...DEFAULT_CATS,...customCats];}
+
+function buildCatSelect(){
+  const sel=$('sv-cat');
+  const cur=sel.value;
+  sel.innerHTML=allCats().map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
+  if(cur)sel.value=cur;
+  renderCustomCatTags();
+}
+
+function renderCustomCatTags(){
+  const el=$('custom-cats');
+  if(!customCats.length){el.innerHTML='<span style="font-size:12px;color:var(--faint)">Nicio categorie adăugată</span>';return;}
+  el.innerHTML=customCats.map(c=>`<span class="cat-tag" data-cat="${esc(c)}" onclick="selectCat(this.dataset.cat)">${esc(c)} <span onclick="event.stopPropagation();delCustomCat(this.parentNode.dataset.cat)" style="opacity:.6;margin-left:3px">×</span></span>`).join('');
+}
+
+function selectCat(c){$('sv-cat').value=c;}
+
+function addCustomCat(){
+  const inp=$('new-cat-input');
+  const val=inp.value.trim();
+  if(!val){toast('⚠️ Scrie un nume!');return;}
+  if(allCats().includes(val)){toast('⚠️ Există deja!');return;}
+  customCats.push(val);
+  inp.value='';
+  save();buildCatSelect();
+  $('sv-cat').value=val;
+  toast('✅ Categorie adăugată!');
+}
+
+function delCustomCat(c){
+  customCats=customCats.filter(x=>x!==c);
+  save();buildCatSelect();
+}
+
+function buildExpCatSelect(){
+  $('ex-cat').innerHTML=EXP_CATS.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
+}
+
+// ── NAV ───────────────────────────────────────────────────────────────
+function go(id){
+  const ids=['dash','svc','fuel','exp','rem','rep','car','drv','set'];
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('on',ids[i]===id));
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  $('pg-'+id).classList.add('on');
+  const renders={dash:renderDash,svc:renderSvc,fuel:renderFuel,exp:renderExp,rem:renderRem,rep:buildRepCats,car:renderCar,drv:()=>{$('drv-url').value=driveUrl;},set:renderSet};
+  if(renders[id])renders[id]();
+}
+
+function openPan(id,editMode){
+  const pan=$(id);
+  pan.classList.add('on');
+  if(!editMode){
+    delete pan.dataset.editId;
+    if(id==='svc-pan'){
+      buildCatSelect();
+      setTodayVal('sv');
+      $('sv-km').value='';
+      $('sv-desc').value='';
+      $('sv-cost').value='';
+      $('sv-shop').value='';
+      $('sv-nm').value='';$('sv-nmu').value='m';$('sv-nk').value='';nextPreview();
+      $('sv-urg').value='Ok';
+      pan.querySelector('.pt').textContent='🔧 Intervenție nouă';
+    }
+    if(id==='fuel-pan'){
+      setTodayVal('ff');
+      $('ff-km').value='';
+      $('ff-litri').value='';
+      $('ff-cost').value='';
+      $('ff-pret').value='';
+      $('ff-stat').value='';
+      $('ff-nota').value='';
+      $('ff-tip').value='Benzină';
+      $('ff-plin').value='1';
+      pan.querySelector('.pt').textContent='⛽ Alimentare nouă';
+    }
+    if(id==='exp-pan'){
+      setTodayVal('ex');
+      $('ex-cost').value='';
+      $('ex-desc').value='';
+      setDateVal('ex-scad','');
+      $('ex-cat').value='Asigurare RCA';
+      pan.querySelector('.pt').textContent='💸 Cheltuială nouă';
+    }
+    if(id==='rem-pan'){
+      $('rm-title').value='';
+      setDateVal('rm','');
+      $('rm-km').value='';
+      $('rm-nota').value='';
+      $('rm-warn').value='7';
+      pan.querySelector('.pt').textContent='🔔 Reminder nou';
+    }
+  }
+  setTimeout(()=>pan.scrollIntoView({behavior:'smooth',block:'start'}),100);
+}
+function closePan(id){$(id).classList.remove('on');}
+
+function toast(msg){
+  const t=$('toast');t.textContent=msg;t.classList.add('on');
+  setTimeout(()=>t.classList.remove('on'),2600);
+}
+
+// ── CONSUM REAL plin→plin ─────────────────────────────────────────────
+function isFull(f){return f.plin==='1'||f.plin===1||f.plin===true;}
+
+function calcConsum(from,to){
+  // AdBlue nu intră în calculul consumului
+  const sorted=fuels.filter(f=>f.km&&f.tip!=='AdBlue').slice().sort((a,b)=>(parseInt(a.km)-parseInt(b.km))||String(a.date).localeCompare(String(b.date)));
+  if(sorted.length<2)return null;
+  let all=[],byId={};
+  let lastFullKm=null,litriAcum=0;
+  for(const f of sorted){
+    const litri=parseFloat(f.litri)||0;
+    if(isFull(f)){
+      litriAcum+=litri;
+      if(lastFullKm!==null){
+        const kmDif=parseInt(f.km)-parseInt(lastFullKm);
+        if(kmDif>0&&litriAcum>0){
+          const consum=litriAcum/kmDif*100;
+          if(consum>=3&&consum<=30){
+            const r={id:f.id,consum,kmDif,litri:litriAcum,fromKm:lastFullKm,toKm:f.km,dateRaw:f.date};
+            all.push(r);byId[f.id]=r;
+          }
+        }
+      }
+      lastFullKm=f.km;litriAcum=0;
+    } else if(lastFullKm!==null){
+      litriAcum+=litri;
+    }
+  }
+  const results=all.filter(r=>(!from||r.dateRaw>=from)&&(!to||r.dateRaw<=to));
+  if(!results.length)return null;
+  const totalLitri=results.reduce((s,r)=>s+r.litri,0);
+  const totalKm=results.reduce((s,r)=>s+r.kmDif,0);
+  const medConsum=totalKm>0?((totalLitri/totalKm)*100).toFixed(2):'0.00';
+  return{medConsum,results,count:results.length,byId};
+}
+
+// Grafic SVG consum în timp
+function consChart(results){
+  const pts=results.slice().sort((a,b)=>String(a.dateRaw).localeCompare(String(b.dateRaw))).slice(-12);
+  if(pts.length<2)return'<div style="font-size:13px;color:var(--faint);text-align:center;padding:8px">Minim 2 intervale plin→plin pentru grafic.</div>';
+  const W=320,H=150,L=18,R=18,T=22,B=24;
+  const vals=pts.map(p=>p.consum);
+  let mn=Math.min(...vals),mx=Math.max(...vals);
+  if(mx-mn<0.5){mn-=0.5;mx+=0.5;}
+  const pd=(mx-mn)*0.15;mn-=pd;mx+=pd;
+  const avg=vals.reduce((a,b)=>a+b,0)/vals.length;
+  const x=i=>L+(W-L-R)*(i/(pts.length-1));
+  const y=v=>T+(H-T-B)*(1-(v-mn)/(mx-mn));
+  const line=pts.map((p,i)=>`${x(i).toFixed(1)},${y(p.consum).toFixed(1)}`).join(' ');
+  const step=pts.length>6?2:1;
+  const dots=pts.map((p,i)=>{
+    const dp=String(p.dateRaw).split('-');
+    const lab=(i%step===0)?`<text x="${x(i).toFixed(1)}" y="${H-8}" text-anchor="middle" font-size="9" fill="#8b9bb4">${dp[2]}/${dp[1]}</text>`:'';
+    return `<circle cx="${x(i).toFixed(1)}" cy="${y(p.consum).toFixed(1)}" r="3.5" fill="#4ade80"/>
+      <text x="${x(i).toFixed(1)}" y="${(y(p.consum)-8).toFixed(1)}" text-anchor="middle" font-size="9" fill="#8b9bb4">${p.consum.toFixed(1)}</text>${lab}`;
+  }).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block">
+    <line x1="${L}" x2="${W-R}" y1="${y(avg).toFixed(1)}" y2="${y(avg).toFixed(1)}" stroke="#8b9bb4" stroke-dasharray="4 4" stroke-width="1"/>
+    <polyline points="${line}" fill="none" stroke="#3b82f6" stroke-width="2"/>
+    ${dots}
+    <text x="${W-R}" y="${(y(avg)-4).toFixed(1)}" text-anchor="end" font-size="9" fill="#8b9bb4">medie ${avg.toFixed(1)}</text>
+  </svg>`;
+}
+
+// ── BACKUP MEMENTO ────────────────────────────────────────────────────
+function bkDays(){
+  if(!lastBackup)return null;
+  const t=new Date(lastBackup).getTime();
+  if(isNaN(t))return null;
+  return Math.max(0,Math.floor((Date.now()-t)/86400000));
+}
+function bkBanner(){
+  if(svcs.length+fuels.length+exps.length===0)return'';
+  const days=bkDays();
+  if(days!==null&&days<BK_DAYS)return'';
+  const msg=days===null?'Nu ai făcut încă niciun backup.':`Ultimul backup: ${agoTxt(days)}.`;
+  return `<div class="bk-alert"><div>💾 ${msg}<br>Datele există doar pe acest telefon.</div><button class="ab" style="background:var(--green);flex-shrink:0" onclick="backupLocal()">Backup acum</button></div>`;
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────
+function renderDash(){
+  $('hsub').textContent=car.brand
+    ?`${car.brand} ${car.model}${car.year?' · '+car.year:''}${car.plate?' · '+car.plate:''}`
+    :'Configurează mașina ta';
+
+  const svcCost=svcs.reduce((s,r)=>s+(parseFloat(r.cost)||0),0);
+  const fuelCost=fuels.reduce((s,r)=>s+(parseFloat(r.cost)||0),0);
+  const expCost=exps.reduce((s,r)=>s+(parseFloat(r.cost)||0),0);
+  const total=svcCost+fuelCost+expCost;
+
+  $('dash-stats').innerHTML=`
+    <div class="st"><div class="si">🔧</div><div class="sv2" style="color:var(--blue)">${svcs.length}</div><div class="sl">Service</div></div>
+    <div class="st"><div class="si">⛽</div><div class="sv2" style="color:var(--orange)">${fuels.length}</div><div class="sl">Alimentări</div></div>
+    <div class="st"><div class="si">💰</div><div class="sv2" style="color:var(--purple)">${total.toFixed(0)}</div><div class="sl">RON total</div></div>`;
+
+  $('bk-alert').innerHTML=bkBanner();
+
+  const due=rems.filter(r=>!r.done&&remStatus(r).cls!=='ok');
+  $('rem-alerts').innerHTML=due.length?`
+    <div class="rem-alert">
+      <div class="rem-title">🔔 ${due.length} reminder${due.length>1?'e':''} în atenție</div>
+      ${due.map(r=>`<div style="font-size:13px;color:#e2e8f0;margin-bottom:4px">• ${esc(r.title)} — ${esc(remStatus(r).txt)}</div>`).join('')}
+    </div>`:'';
+
+  const cm=calcConsum();const byId=cm?cm.byId:{};
+  $('dash-svc').innerHTML=svcs.length
+    ?svcs.slice(0,2).map(r=>itemSvc(r,false)).join('')
+    :`<div class="emp"><div class="ei">🔧</div><div class="et">Nicio intervenție</div></div>`;
+  $('dash-fuel').innerHTML=fuels.length
+    ?fuels.slice(0,2).map(f=>itemFuel(f,false,byId)).join('')
+    :`<div class="emp"><div class="ei">⛽</div><div class="et">Nicio alimentare</div></div>`;
+  $('dash-exp').innerHTML=exps.length
+    ?exps.slice(0,2).map(e=>itemExp(e,false)).join('')
+    :`<div class="emp"><div class="ei">💸</div><div class="et">Nicio cheltuială</div></div>`;
+}
+
+// ── SERVICE ───────────────────────────────────────────────────────────
+function itemSvc(r,del){
+  const urg=r.urgency==='Urgent'?'ug':r.urgency==='Atenție'?'wn':'ok';
+  return `<div class="item"><div class="it">
+    <div class="ii">${ICONS[r.category]||'🔧'}</div>
+    <div class="inf">
+      <div class="itl">${esc(r.category)}</div>
+      <div class="itm">${fmtDate(r.date)} · ${esc(r.km)} km</div>
+      ${r.shop?`<div style="font-size:13px;color:#38bdf8;font-weight:600;margin-top:2px">🏪 ${esc(r.shop)}</div>`:''}
+      ${r.desc?`<div class="itd" style="white-space:pre-line">${esc(r.desc)}</div>`:''}
+      ${(r.nextKm||r.nextDate)?`<div class="itd">🔔 Următoarea: ${r.nextDate?'până la '+fmtDate(r.nextDate):''}${r.nextDate&&r.nextKm?' sau ':''}${r.nextKm?'la '+esc(r.nextKm)+' km':''}</div>`:''}
+      <span class="bdg ${urg}">${esc(r.urgency)}</span>
+    </div>
+    <div class="ir">
+      ${r.cost?`<div class="ic" style="color:#a78bfa">${(parseFloat(r.cost)||0).toFixed(2)} RON</div>`:''}
+      ${del?`<div style="display:flex;gap:4px;justify-content:flex-end;margin-top:4px"><button class="db" onclick="editSvc(${r.id})">✏️</button><button class="db" onclick="delSvc(${r.id})">🗑️</button></div>`:''}
+    </div>
+  </div></div>`;
+}
+
+function renderSvc(){
+  $('svc-cnt').textContent=`Intervenții service (${svcs.length})`;
+  $('svc-list').innerHTML=svcs.length
+    ?svcs.map(r=>itemSvc(r,true)).join('')
+    :`<div class="emp"><div class="ei">🔧</div><div class="et">Nicio intervenție înregistrată</div><div class="es">Apasă + Adaugă</div></div>`;
+}
+
+function addSvc(){
+  const km=$('sv-km').value,ds=dateState('sv');
+  if(!km||ds.empty){toast('⚠️ Completează data și km!');return;}
+  if(!ds.ok){toast('⚠️ Data nu este validă!');return;}
+  const date=ds.val;
+  const pan=$('svc-pan');
+  const editId=pan.dataset.editId?parseInt(pan.dataset.editId):null;
+  const nx=computeNext();
+  const obj={date,km,category:$('sv-cat').value,desc:$('sv-desc').value,cost:$('sv-cost').value,urgency:$('sv-urg').value,shop:$('sv-shop').value.trim(),nextKm:nx.km,nextDate:nx.date,nextM:nx.nm||'',nextMU:nx.unit,nextK:nx.delta||''};
+  if(editId){obj.id=editId;svcs=svcs.map(r=>r.id===editId?obj:r);}
+  else{obj.id=Date.now();svcs=[obj,...svcs];}
+  svcs=svcs.sort((a,b)=>b.date.localeCompare(a.date));
+  delete pan.dataset.editId;
+  pan.querySelector('.pt').textContent='🔧 Intervenție nouă';
+  syncKm();save();closePan('svc-pan');renderSvc();toast(editId?'✅ Actualizat!':'✅ Salvat!');
+}
+// ── URMĂTOAREA INTERVENȚIE: luni/ani și/sau km ────────────────────────
+function addMonths(iso,n){
+  const d=parseD(iso);if(!d)return'';
+  const day=d.getDate();
+  const t=new Date(d.getFullYear(),d.getMonth()+n,1);
+  const last=new Date(t.getFullYear(),t.getMonth()+1,0).getDate();
+  t.setDate(Math.min(day,last));
+  return localISO(t);
+}
+function computeNext(){
+  const ds=dateState('sv');
+  const nm=parseInt($('sv-nm').value)||0,unit=$('sv-nmu').value;
+  const months=unit==='y'?nm*12:nm;
+  const delta=parseInt($('sv-nk').value)||0,km=parseInt($('sv-km').value)||0;
+  return{nm,unit,months,delta,
+    date:(months>0&&ds.ok)?addMonths(ds.val,months):'',
+    km:(delta>0&&km>0)?String(km+delta):''};
+}
+function nextPreview(){
+  const n=computeNext(),parts=[];
+  if(n.date)parts.push('📅 până la '+fmtDate(n.date));
+  if(n.km)parts.push('📍 la '+n.km+' km');
+  $('sv-prev').innerHTML=parts.length
+    ?'🔔 Următoarea intervenție: <strong style="color:#fde047">'+parts.join(' sau ')+'</strong>'
+    :'Lasă gol dacă nu vrei reminder.';
+}
+function setNext(kind,v,unit){
+  if(kind==='t'){$('sv-nm').value=v;$('sv-nmu').value=unit;}
+  else $('sv-nk').value=v;
+  nextPreview();
+}
+
+function delSvc(id){if(!confirm('Ștergi?'))return;svcs=svcs.filter(r=>r.id!==id);save();renderSvc();renderDash();}
+function editSvc(id){
+  const r=svcs.find(x=>x.id===id);if(!r)return;
+  buildCatSelect();
+  if(!allCats().includes(r.category)){
+    const o=document.createElement('option');o.value=r.category;o.textContent=r.category;$('sv-cat').appendChild(o);
+  }
+  setDateVal('sv',r.date);
+  $('sv-km').value=r.km;
+  $('sv-cat').value=r.category;
+  $('sv-desc').value=r.desc||'';
+  $('sv-cost').value=r.cost||'';
+  $('sv-urg').value=r.urgency||'Ok';
+  $('sv-shop').value=r.shop||'';
+  $('sv-nm').value=r.nextM||'';
+  $('sv-nmu').value=r.nextMU||'m';
+  let dk=r.nextK||'';
+  if(!dk&&r.nextKm){const d=(parseInt(r.nextKm)||0)-(parseInt(r.km)||0);if(d>0)dk=d;}
+  $('sv-nk').value=dk;
+  openPan('svc-pan',true);
+  nextPreview();
+  $('svc-pan').dataset.editId=id;
+  document.querySelector('#svc-pan .pt').textContent='✏️ Editează intervenție';
+}
+
+// ── FUEL ──────────────────────────────────────────────────────────────
+function calcPret(){
+  const l=parseFloat($('ff-litri').value);
+  const c=parseFloat($('ff-cost').value);
+  if(l&&c)$('ff-pret').value=(c/l).toFixed(3);
+}
+
+function itemFuel(f,del,byId){
+  const pret=f.pret||(f.cost&&f.litri?(parseFloat(f.cost)/parseFloat(f.litri)).toFixed(2):'');
+  const cr=byId&&byId[f.id];
+  const consumStr=cr?cr.consum.toFixed(2)+' L/100km':'—';
+  return `<div class="item"><div class="it">
+    <div class="ii">⛽</div>
+    <div class="inf">
+      <div class="itl">${esc(f.tip||'Combustibil')}${f.stat?' · '+esc(f.stat):''}</div>
+      <div class="itm">${fmtDate(f.date)} · ${esc(f.km)} km</div>
+      <div class="itd">${f.litri?esc(f.litri)+' L':''}${pret?' · '+esc(pret)+' RON/L':''}${isFull(f)?' · 🟢 Plin complet':' · 🟡 Parțial'}</div>
+      <div class="itd">Consum: <strong style="color:#4ade80;font-weight:700">${consumStr}</strong></div>
+      ${f.nota?`<div class="itd" style="white-space:pre-line">${esc(f.nota)}</div>`:''}
+      <span class="bdg fu">⛽ Alimentare</span>
+    </div>
+    <div class="ir">
+      ${f.cost?`<div class="ic" style="color:#fb923c">${(parseFloat(f.cost)||0).toFixed(2)} RON</div>`:''}
+      ${del?`<div style="display:flex;gap:4px;justify-content:flex-end;margin-top:4px"><button class="db" onclick="editFuel(${f.id})">✏️</button><button class="db" onclick="delFuel(${f.id})">🗑️</button></div>`:''}
+    </div>
+  </div></div>`;
+}
+
+function renderFuel(){
+  const cons=calcConsum();
+  const cd=$('consum-display');
+  if(cons){
+    cd.innerHTML=`<div class="consum-card">
+      <div style="font-size:12px;color:#4ade80;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">⛽ Consum real plin→plin</div>
+      <div class="consum-val">${cons.medConsum} <span style="font-size:16px;color:#94a3b8">L/100km</span></div>
+      <div class="consum-sub">Calculat din ${cons.count} interval${cons.count>1?'e':''} · Ultimul: ${cons.results[cons.results.length-1].consum.toFixed(2)} L/100km</div>
+      <div style="margin-top:10px;max-height:88px;overflow-y:auto;display:flex;flex-direction:column;gap:5px;padding-right:4px;">${[...cons.results].reverse().map(r=>`<div style="font-size:12px;color:#94a3b8;flex-shrink:0">• ${fmtDate(r.dateRaw)}: <strong style="color:#e2e8f0">${r.consum.toFixed(2)} L/100km</strong> (${r.kmDif} km · ${r.litri.toFixed(2)} L)</div>`).join('')}</div>
+    </div>`;
+    $('consum-chart').innerHTML=`<div class="card"><div class="ct">📈 Consum în timp (L/100km)</div>${consChart(cons.results)}</div>`;
+  } else {
+    cd.innerHTML=`<div class="card" style="text-align:center;color:var(--faint)"><div style="font-size:14px">Adaugă minim 2 alimentări <strong>plin complet</strong> consecutive pentru consumul real</div></div>`;
+    $('consum-chart').innerHTML='';
+  }
+
+  const only=fuels.filter(f=>f.tip!=='AdBlue');
+  const totalC=fuels.reduce((s,f)=>s+(parseFloat(f.cost)||0),0);
+  const fuelC=only.reduce((s,f)=>s+(parseFloat(f.cost)||0),0);
+  const totalL=only.reduce((s,f)=>s+(parseFloat(f.litri)||0),0);
+  const medP=totalL>0?(fuelC/totalL).toFixed(2):0;
+  $('fuel-stats').innerHTML=`
+    <div class="st" style="border-color:#ea580c33"><div class="si">💰</div><div class="sv2" style="color:#fb923c">${totalC.toFixed(0)} RON</div><div class="sl">Total (cu AdBlue)</div></div>
+    <div class="st" style="border-color:#ea580c33"><div class="si">🪣</div><div class="sv2" style="color:#fb923c">${totalL.toFixed(1)} L</div><div class="sl">Litri combustibil</div></div>
+    <div class="st" style="border-color:#ea580c33"><div class="si">💲</div><div class="sv2" style="color:#fb923c">${medP}</div><div class="sl">RON/litru mediu</div></div>
+    <div class="st" style="border-color:#ea580c33"><div class="si">📊</div><div class="sv2" style="color:#fb923c">${fuels.length}</div><div class="sl">Alimentări</div></div>`;
+
+  const byId=cons?cons.byId:{};
+  $('fuel-cnt').textContent=`Alimentări (${fuels.length})`;
+  $('fuel-list').innerHTML=fuels.length
+    ?fuels.map(f=>itemFuel(f,true,byId)).join('')
+    :`<div class="emp"><div class="ei">⛽</div><div class="et">Nicio alimentare înregistrată</div><div class="es">Apasă + Adaugă</div></div>`;
+}
+
+function addFuel(){
+  const km=$('ff-km').value,ds=dateState('ff');
+  if(!km||ds.empty){toast('⚠️ Completează data și km!');return;}
+  if(!ds.ok){toast('⚠️ Data nu este validă!');return;}
+  const date=ds.val;
+  const litri=$('ff-litri').value;
+  const cost=$('ff-cost').value;
+  let pret=$('ff-pret').value;
+  if(!pret&&litri&&cost)pret=(parseFloat(cost)/parseFloat(litri)).toFixed(3);
+  const pan=$('fuel-pan');
+  const editId=pan.dataset.editId?parseInt(pan.dataset.editId):null;
+  const obj={date,km,litri,cost,pret,tip:$('ff-tip').value,stat:$('ff-stat').value.trim(),plin:$('ff-plin').value,nota:$('ff-nota').value};
+  if(editId){obj.id=editId;fuels=fuels.map(f=>f.id===editId?obj:f);}
+  else{obj.id=Date.now();fuels=[obj,...fuels];}
+  fuels=fuels.sort((a,b)=>b.date.localeCompare(a.date));
+  delete pan.dataset.editId;
+  pan.querySelector('.pt').textContent='⛽ Alimentare nouă';
+  syncKm();save();closePan('fuel-pan');renderFuel();toast(editId?'✅ Actualizat!':'✅ Salvat!');
+}
+function delFuel(id){if(!confirm('Ștergi?'))return;fuels=fuels.filter(f=>f.id!==id);save();renderFuel();renderDash();}
+function editFuel(id){
+  const f=fuels.find(x=>x.id===id);if(!f)return;
+  setDateVal('ff',f.date);
+  $('ff-km').value=f.km;
+  $('ff-litri').value=f.litri||'';
+  $('ff-cost').value=f.cost||'';
+  $('ff-pret').value=f.pret||'';
+  $('ff-tip').value=f.tip||'Benzină';
+  $('ff-stat').value=f.stat||'';
+  $('ff-plin').value=isFull(f)?'1':'0';
+  $('ff-nota').value=f.nota||'';
+  openPan('fuel-pan',true);
+  $('fuel-pan').dataset.editId=id;
+  document.querySelector('#fuel-pan .pt').textContent='✏️ Editează alimentare';
+}
+
+// ── CHELTUIELI ────────────────────────────────────────────────────────
+function itemExp(e,del){
+  const dl=e.scad?daysTo(e.scad):null;
+  const overdue=dl!==null&&dl<0;
+  const soon=dl!==null&&dl>=0&&dl<=30;
+  return `<div class="item"><div class="it">
+    <div class="ii">${ICONS[e.cat]||'💳'}</div>
+    <div class="inf">
+      <div class="itl">${esc(e.cat)}</div>
+      <div class="itm">${fmtDate(e.date)}${e.scad?' · Scadent: '+fmtDate(e.scad):''}</div>
+      ${e.desc?`<div class="itd" style="white-space:pre-line">${esc(e.desc)}</div>`:''}
+      <span class="bdg ex">💸</span>
+      ${overdue?'<span class="bdg ug" style="margin-left:4px">⚠️ Expirat</span>':''}
+      ${soon?'<span class="bdg wn" style="margin-left:4px">⏰ Scade curând</span>':''}
+    </div>
+    <div class="ir">
+      ${e.cost?`<div class="ic" style="color:#c084fc">${(parseFloat(e.cost)||0).toFixed(2)} RON</div>`:''}
+      ${del?`<div style="display:flex;gap:4px;justify-content:flex-end;margin-top:4px"><button class="db" onclick="editExp(${e.id})">✏️</button><button class="db" onclick="delExp(${e.id})">🗑️</button></div>`:''}
+    </div>
+  </div></div>`;
+}
+
+function renderExp(){
+  const total=exps.reduce((s,e)=>s+(parseFloat(e.cost)||0),0);
+  $('exp-stats').innerHTML=`
+    <div class="st" style="border-color:#9333ea33"><div class="si">💸</div><div class="sv2" style="color:#c084fc">${total.toFixed(0)} RON</div><div class="sl">Total cheltuieli</div></div>
+    <div class="st" style="border-color:#9333ea33"><div class="si">📋</div><div class="sv2" style="color:#c084fc">${exps.length}</div><div class="sl">Intrări</div></div>`;
+  $('exp-cnt').textContent=`Cheltuieli extra (${exps.length})`;
+  $('exp-list').innerHTML=exps.length
+    ?exps.map(e=>itemExp(e,true)).join('')
+    :`<div class="emp"><div class="ei">💸</div><div class="et">Nicio cheltuială</div></div>`;
+}
+
+function addExp(){
+  const ds=dateState('ex'),cost=$('ex-cost').value;
+  if(ds.empty||!cost){toast('⚠️ Completează data și costul!');return;}
+  if(!ds.ok){toast('⚠️ Data nu este validă!');return;}
+  const sc=dateState('ex-scad');
+  if(!sc.empty&&!sc.ok){toast('⚠️ Scadența nu este validă!');return;}
+  const pan=$('exp-pan');
+  const editId=pan.dataset.editId?parseInt(pan.dataset.editId):null;
+  const obj={date:ds.val,cost,cat:$('ex-cat').value,desc:$('ex-desc').value,scad:sc.val};
+  if(editId){obj.id=editId;exps=exps.map(e=>e.id===editId?obj:e);}
+  else{obj.id=Date.now();exps=[obj,...exps];}
+  exps=exps.sort((a,b)=>b.date.localeCompare(a.date));
+  delete pan.dataset.editId;
+  pan.querySelector('.pt').textContent='💸 Cheltuială nouă';
+  save();closePan('exp-pan');renderExp();toast(editId?'✅ Actualizat!':'✅ Salvat!');
+}
+function delExp(id){if(!confirm('Ștergi?'))return;exps=exps.filter(e=>e.id!==id);save();renderExp();renderDash();}
+function editExp(id){
+  const e=exps.find(x=>x.id===id);if(!e)return;
+  setDateVal('ex',e.date);
+  $('ex-cost').value=e.cost||'';
+  $('ex-cat').value=e.cat||'Altele';
+  $('ex-desc').value=e.desc||'';
+  setDateVal('ex-scad',e.scad||'');
+  openPan('exp-pan',true);
+  $('exp-pan').dataset.editId=id;
+  document.querySelector('#exp-pan .pt').textContent='✏️ Editează cheltuială';
+}
+
+// ── REMINDERE ─────────────────────────────────────────────────────────
+function itemRem(r){
+  const st=remStatus(r);
+  const k=curKm();
+  return `<div class="item${r.done?' isdone':''}"><div class="it">
+    <div class="ii">${r.done?'✅':'🔔'}</div>
+    <div class="inf">
+      <div class="itl">${esc(r.title)}</div>
+      ${r.date?`<div class="itm">📅 ${fmtDate(r.date)}</div>`:''}
+      ${r.km?`<div class="itm">📍 La ${esc(r.km)} km${k?' (actuali: '+k+' km)':''}</div>`:''}
+      ${r.nota?`<div class="itd">${esc(r.nota)}</div>`:''}
+      <span class="bdg ${st.cls}">${esc(st.txt)}</span>
+      ${r.auto?'<span class="bdg au" style="margin-left:4px">🤖 automat</span>':''}
+    </div>
+    <div class="ir" style="display:flex;flex-direction:column;gap:2px;align-items:flex-end">
+      <button class="db" data-id="${esc(r.id)}" onclick="toggleRem(this.dataset.id)" title="${r.done?'Reactivează':'Marchează ca făcut'}">${r.done?'↩️':'✔️'}</button>
+      ${r.auto?'':`<button class="db" data-id="${esc(r.id)}" onclick="editRem(this.dataset.id)">✏️</button><button class="db" data-id="${esc(r.id)}" onclick="delRem(this.dataset.id)">🗑️</button>`}
+    </div>
+  </div></div>`;
+}
+function renderRem(){
+  const list=rems.slice().sort((a,b)=>{
+    if(!!a.done!==!!b.done)return a.done?1:-1;
+    const da=a.date||'9999',db=b.date||'9999';
+    return da.localeCompare(db)||((parseInt(a.km)||1e9)-(parseInt(b.km)||1e9));
+  });
+  $('rem-list').innerHTML=list.length
+    ?list.map(r=>itemRem(r)).join('')
+    :`<div class="emp"><div class="ei">🔔</div><div class="et">Niciun reminder</div><div class="es">Se creează automat din scadențe (RCA, ITP...) și din „următoarea intervenție la km"</div></div>`;
+}
+function addRem(){
+  const title=$('rm-title').value.trim();
+  if(!title){toast('⚠️ Scrie un titlu!');return;}
+  const ds=dateState('rm');
+  if(!ds.empty&&!ds.ok){toast('⚠️ Data nu este validă!');return;}
+  const km=$('rm-km').value;
+  if(ds.empty&&!km){toast('⚠️ Pune o dată sau un număr de km!');return;}
+  const pan=$('rem-pan');
+  const editId=pan.dataset.editId?parseInt(pan.dataset.editId):null;
+  const obj={id:editId||Date.now(),title,date:ds.val,km,nota:$('rm-nota').value,warn:parseInt($('rm-warn').value)||7,done:false};
+  if(editId){
+    const o=rems.find(r=>r.id===editId);if(o)obj.done=!!o.done;
+    rems=rems.map(r=>r.id===editId?obj:r);
+  } else rems=[obj,...rems];
+  delete pan.dataset.editId;
+  save();closePan('rem-pan');renderRem();toast(editId?'✅ Actualizat!':'✅ Reminder salvat!');
+}
+function findRem(id){return rems.find(r=>String(r.id)===String(id));}
+function toggleRem(id){
+  const r=findRem(id);if(!r)return;
+  r.done=!r.done;
+  save();renderRem();toast(r.done?'✔ Marcat ca făcut':'↩️ Reactivat');
+}
+function editRem(id){
+  const r=findRem(id);if(!r||r.auto)return;
+  $('rm-title').value=r.title;
+  setDateVal('rm',r.date||'');
+  $('rm-km').value=r.km||'';
+  $('rm-nota').value=r.nota||'';
+  $('rm-warn').value=String(r.warn||7);
+  openPan('rem-pan',true);
+  $('rem-pan').dataset.editId=r.id;
+  document.querySelector('#rem-pan .pt').textContent='✏️ Editează reminder';
+}
+function delRem(id){
+  const r=findRem(id);if(!r||r.auto)return;
+  if(!confirm('Ștergi reminderul „'+r.title+'"?'))return;
+  rems=rems.filter(x=>String(x.id)!==String(id));
+  save();renderRem();
+}
+
+// ── RAPOARTE ──────────────────────────────────────────────────────────
+function buildRepCats(){
+  const sel=$('rep-cat');const cur=sel.value;
+  const opt=(p,c)=>`<option value="${p}${esc(c)}">${esc(c)}</option>`;
+  sel.innerHTML='<option value="">Toate categoriile</option>'
+    +`<optgroup label="Service">${allCats().map(c=>opt('s:',c)).join('')}</optgroup>`
+    +`<optgroup label="Cheltuieli">${EXP_CATS.map(c=>opt('e:',c)).join('')}</optgroup>`
+    +`<optgroup label="Combustibil">${FUEL_TYPES.map(c=>opt('f:',c)).join('')}</optgroup>`;
+  sel.value=cur;
+}
+
+function setRepPeriod(){
+  const v=$('rep-quick').value;
+  const now=new Date(),y=now.getFullYear(),m=now.getMonth();
+  let from='',to=localISO(now);
+  if(v==='month'){from=localISO(new Date(y,m,1));}
+  else if(v==='last3'){from=localISO(new Date(y,m-3,1));}
+  else if(v==='last6'){from=localISO(new Date(y,m-6,1));}
+  else if(v==='year'){from=localISO(new Date(y,0,1));}
+  else if(v==='all'){from='2000-01-01';}
+  $('rep-from').value=from;
+  $('rep-to').value=to;
+}
+
+function tblSvc(rows){
+  if(!rows.length)return'<div style="font-size:13px;color:var(--faint)">Nicio intrare în perioada aleasă.</div>';
+  return`<div class="tbl-wrap"><table class="tbl">
+    <tr><th>Data</th><th>Categorie</th><th>Km</th><th>Descriere</th><th>Service</th><th>Status</th><th>Cost RON</th></tr>
+    ${rows.map(r=>`<tr>
+      <td>${fmtDate(r.date)}</td><td>${esc(r.category)}</td><td>${esc(r.km)}</td>
+      <td>${esc(r.desc)||'—'}</td><td>${esc(r.shop)||'—'}</td>
+      <td><span class="bdg ${r.urgency==='Urgent'?'ug':r.urgency==='Atenție'?'wn':'ok'}">${esc(r.urgency)}</span></td>
+      <td style="font-weight:700;color:#a78bfa">${r.cost?(parseFloat(r.cost)||0).toFixed(2):'—'}</td>
+    </tr>`).join('')}
+    <tr style="background:#1e3a5f22"><td colspan="6" style="font-weight:700">TOTAL</td><td style="font-weight:800;color:#4ade80">${rows.reduce((s,r)=>s+(parseFloat(r.cost)||0),0).toFixed(0)} RON</td></tr>
+  </table></div>`;
+}
+
+function tblFuel(rows){
+  if(!rows.length)return'<div style="font-size:13px;color:var(--faint)">Nicio intrare în perioada aleasă.</div>';
+  return`<div class="tbl-wrap"><table class="tbl">
+    <tr><th>Data</th><th>Km</th><th>Tip</th><th>Stație</th><th>Litri</th><th>RON/L</th><th>Plin</th><th>Cost RON</th></tr>
+    ${rows.map(f=>`<tr>
+      <td>${fmtDate(f.date)}</td><td>${esc(f.km)}</td><td>${esc(f.tip)||'—'}</td><td>${esc(f.stat)||'—'}</td>
+      <td>${esc(f.litri)||'—'}</td>
+      <td>${f.pret?(parseFloat(f.pret)||0).toFixed(2):(f.cost&&f.litri?(parseFloat(f.cost)/parseFloat(f.litri)).toFixed(2):'—')}</td>
+      <td>${isFull(f)?'✅':'⚡'}</td>
+      <td style="font-weight:700;color:#fb923c">${f.cost?(parseFloat(f.cost)||0).toFixed(2):'—'}</td>
+    </tr>`).join('')}
+    <tr style="background:#1e3a5f22"><td colspan="4" style="font-weight:700">TOTAL</td>
+      <td style="font-weight:800">${rows.filter(f=>f.tip!=='AdBlue').reduce((s,f)=>s+(parseFloat(f.litri)||0),0).toFixed(1)} L</td>
+      <td>—</td><td>—</td>
+      <td style="font-weight:800;color:#4ade80">${rows.reduce((s,f)=>s+(parseFloat(f.cost)||0),0).toFixed(0)} RON</td>
+    </tr>
+  </table></div>`;
+}
+
+function tblExp(rows){
+  if(!rows.length)return'<div style="font-size:13px;color:var(--faint)">Nicio intrare în perioada aleasă.</div>';
+  return`<div class="tbl-wrap"><table class="tbl">
+    <tr><th>Data</th><th>Categorie</th><th>Descriere</th><th>Scadență</th><th>Cost RON</th></tr>
+    ${rows.map(e=>`<tr>
+      <td>${fmtDate(e.date)}</td><td>${esc(e.cat)}</td><td>${esc(e.desc)||'—'}</td>
+      <td>${e.scad?fmtDate(e.scad):'—'}</td>
+      <td style="font-weight:700;color:#c084fc">${e.cost?(parseFloat(e.cost)||0).toFixed(2):'—'}</td>
+    </tr>`).join('')}
+    <tr style="background:#1e3a5f22"><td colspan="4" style="font-weight:700">TOTAL</td><td style="font-weight:800;color:#4ade80">${rows.reduce((s,e)=>s+(parseFloat(e.cost)||0),0).toFixed(0)} RON</td></tr>
+  </table></div>`;
+}
+
+function genRep(){
+  const from=$('rep-from').value;
+  const to=$('rep-to').value;
+  let type=$('rep-type').value;
+  const cs=$('rep-cat').value;
+  const cpre=cs?cs.slice(0,2):'',cval=cs?cs.slice(2):'';
+  if(cpre==='s:')type='svc';else if(cpre==='e:')type='exp';else if(cpre==='f:')type='fuel';
+  const inRange=d=>{if(from&&d<from)return false;if(to&&d>to)return false;return true;};
+
+  const rangeSvc=svcs.filter(r=>inRange(r.date));
+  const rangeFuel=fuels.filter(f=>inRange(f.date));
+  const fsvcs=rangeSvc.filter(r=>cpre!=='s:'||r.category===cval);
+  const ffuels=rangeFuel.filter(f=>cpre!=='f:'||f.tip===cval);
+  const fexps=exps.filter(e=>inRange(e.date)&&(cpre!=='e:'||e.cat===cval));
+
+  const svcCost=fsvcs.reduce((s,r)=>s+(parseFloat(r.cost)||0),0);
+  const fuelCost=ffuels.reduce((s,f)=>s+(parseFloat(f.cost)||0),0);
+  const expCost=fexps.reduce((s,e)=>s+(parseFloat(e.cost)||0),0);
+  const total=svcCost+fuelCost+expCost;
+  const totalL=ffuels.filter(f=>f.tip!=='AdBlue').reduce((s,f)=>s+(parseFloat(f.litri)||0),0);
+  const cons=calcConsum(from,to);
+
+  // Km înregistrați în perioadă (între prima și ultima înregistrare) și cost/km
+  const kms=[...rangeSvc,...rangeFuel].map(x=>parseInt(x.km)||0).filter(k=>k>0);
+  const kmDiff=kms.length>=2?Math.max(...kms)-Math.min(...kms):0;
+  const allFuelCost=rangeFuel.reduce((s,f)=>s+(parseFloat(f.cost)||0),0);
+  const allTotal=rangeSvc.reduce((s,r)=>s+(parseFloat(r.cost)||0),0)+allFuelCost+exps.filter(e=>inRange(e.date)).reduce((s,e)=>s+(parseFloat(e.cost)||0),0);
+  const perKm=(v)=>kmDiff>0?(v/kmDiff).toFixed(2)+' RON/km':'—';
+
+  // grafic lunar (doar la raportul complet)
+  const months={};
+  [...fsvcs.map(r=>({d:r.date,c:parseFloat(r.cost)||0})),
+   ...ffuels.map(f=>({d:f.date,c:parseFloat(f.cost)||0})),
+   ...fexps.map(e=>({d:e.date,c:parseFloat(e.cost)||0}))
+  ].forEach(({d,c})=>{const k=d.slice(0,7);months[k]=(months[k]||0)+c;});
+  const mkeys=Object.keys(months).sort().slice(-6);
+  const maxM=Math.max(...mkeys.map(k=>months[k]),1);
+  const chartHTML=mkeys.length?`<div class="chart-wrap"><div class="chart">${mkeys.map(k=>`<div class="bar-g"><div class="bar-v">${months[k].toFixed(0)}</div><div class="bar" style="height:${Math.max(months[k]/maxM*90,3)}px;background:var(--blue)"></div><div class="bar-l">${k.slice(5)}/${k.slice(2,4)}</div></div>`).join('')}</div></div>`:'';
+
+  let html='<div class="card">';
+  if(cs)html+=`<div style="font-size:13px;color:var(--muted);margin-bottom:10px">Filtru categorie: <strong style="color:var(--text)">${esc(cval)}</strong></div>`;
+
+  if(type==='all'||type==='svc'){
+    html+=`<div class="rep-section">
+      <div class="rep-title">🔧 Service (${fsvcs.length} intervenții · ${svcCost.toFixed(0)} RON)</div>
+      ${tblSvc(fsvcs)}
+    </div>`;
+  }
+  if(type==='all'||type==='fuel'){
+    html+=`<div class="rep-section">
+      <div class="rep-title">⛽ Combustibil (${ffuels.length} alimentări · ${totalL.toFixed(1)} L · ${fuelCost.toFixed(0)} RON)</div>
+      ${cons?`<div style="font-size:14px;color:#4ade80;font-weight:700;margin-bottom:4px">Consum mediu real: ${cons.medConsum} L/100km</div>`:''}
+      ${kmDiff>0?`<div style="font-size:13px;color:var(--muted);margin-bottom:8px">Combustibil: ${perKm(allFuelCost)}</div>`:''}
+      ${cons?`<div style="margin:8px 0 12px"><div style="font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;margin-bottom:4px">📈 Consum în timp</div>${consChart(cons.results)}</div>`:''}
+      ${tblFuel(ffuels)}
+    </div>`;
+  }
+  if(type==='all'||type==='exp'){
+    html+=`<div class="rep-section">
+      <div class="rep-title">💸 Cheltuieli extra (${fexps.length} intrări · ${expCost.toFixed(0)} RON)</div>
+      ${tblExp(fexps)}
+    </div>`;
+  }
+  if(type==='all'){
+    const items=[['Service',svcCost.toFixed(0)+' RON'],['Combustibil',fuelCost.toFixed(0)+' RON'],['Cheltuieli extra',expCost.toFixed(0)+' RON'],['TOTAL',total.toFixed(0)+' RON'],
+      ['Km înregistrați',kmDiff>0?kmDiff+' km':'—'],['Cost total / km',perKm(allTotal)],['Combustibil / km',perKm(allFuelCost)],['Consum mediu',cons?cons.medConsum+' L/100km':'—']];
+    html+=`<div class="rep-section">
+      <div class="rep-title">💰 Sumar total</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        ${items.map(([k,v])=>`<div class="sumi"><div class="sumk">${k}</div><div class="sumv" style="${k==='TOTAL'?'color:#4ade80;font-size:16px':''}">${v}</div></div>`).join('')}
+      </div>
+      ${chartHTML?`<div style="margin-top:14px;font-size:13px;font-weight:700;color:#93c5fd;margin-bottom:8px">📊 Cheltuieli lunare (RON)</div>${chartHTML}`:''}
+    </div>`;
+  }
+  html+='</div>';
+  $('rep-out').innerHTML=html;
+}
+
+function repPDF(){
+  genRep();
+  setTimeout(()=>{
+    const content=$('rep-out').innerHTML;
+    const w=window.open('','_blank');
+    if(!w){toast('⚠️ Permite ferestre pop-up pentru PDF');return;}
+    w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Raport Mecanic Virtual</title>
+    <style>
+      :root{--blue:#3b82f6;}
+      body{font-family:Arial,sans-serif;padding:20px;color:#1a1a2e;font-size:13px;}
+      h1{font-size:18px;margin-bottom:4px;}
+      .rep-title{font-weight:700;font-size:14px;color:#1e3a8a;margin:16px 0 8px;border-bottom:2px solid #3b82f6;padding-bottom:4px;}
+      .rep-section{margin-bottom:20px;}
+      table{width:100%;border-collapse:collapse;font-size:12px;margin-top:6px;}
+      th{background:#dbeafe;color:#1e3a8a;padding:7px 8px;text-align:left;font-size:11px;}
+      td{padding:7px 8px;border-bottom:1px solid #e2e8f0;}
+      .sumi{background:#f1f5f9;border-radius:6px;padding:8px 10px;display:inline-block;margin:4px;min-width:140px;}
+      .sumk{font-size:10px;color:#64748b;text-transform:uppercase;}
+      .sumv{font-size:14px;font-weight:700;}
+      .bdg{border:1px solid #cbd5e1;padding:1px 6px;border-radius:4px;font-size:10px;}
+      .ok{color:#15803d}.wn{color:#a16207}.ug{color:#b91c1c}
+      .chart{display:flex;align-items:flex-end;gap:6px;height:110px;}
+      .bar-g{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;}
+      .bar{width:100%;background:#3b82f6 !important;border-radius:4px 4px 0 0;}
+      .bar-l,.bar-v{font-size:10px;text-align:center;}
+      [style*="color:#4ade80"]{color:#15803d !important}
+      [style*="color:#a78bfa"]{color:#6d28d9 !important}
+      [style*="color:#fb923c"]{color:#c2410c !important}
+      [style*="color:#c084fc"]{color:#7e22ce !important}
+      [style*="color:#93c5fd"]{color:#1e3a8a !important}
+      [style*="color:var(--muted)"],[style*="color:var(--faint)"]{color:#64748b !important}
+      @media print{body{padding:10px;}}
+    </style></head><body>
+    <h1>🔧 Raport Mecanic Virtual</h1>
+    <p style="color:#64748b;font-size:12px">${esc(car.brand)} ${esc(car.model)} ${esc(car.year)}${car.plate?' · '+esc(car.plate):''} · Perioada: ${fmtDate($('rep-from').value)||'—'} – ${fmtDate($('rep-to').value)||'—'} · Generat: ${new Date().toLocaleDateString('ro-RO')}</p>
+    <hr style="margin:12px 0">${content}</body></html>`);
+    w.document.close();
+    setTimeout(()=>w.print(),600);
+  },400);
+}
+
+// ── MAȘINA ────────────────────────────────────────────────────────────
+function renderCar(){
+  ['brand','model','year','km','fuel','plate','vin','tank'].forEach(k=>{
+    const el=$('c-'+k);if(el)el.value=car[k]||'';
+  });
+  if(!car.brand){$('car-sum').innerHTML='';return;}
+  const lastKm=svcs.length?Math.max(...svcs.map(r=>parseInt(r.km)||0)):0;
+  const svcCost=svcs.reduce((s,r)=>s+(parseFloat(r.cost)||0),0);
+  const fuelCost=fuels.reduce((s,r)=>s+(parseFloat(r.cost)||0),0);
+  const expCost=exps.reduce((s,r)=>s+(parseFloat(r.cost)||0),0);
+  const cons=calcConsum();
+  $('car-sum').innerHTML=`
+    <div class="card" style="background:linear-gradient(135deg,#1e3a5f22,#1a1a3e33);border-color:#1e40af44;">
+      <div class="ct">📊 Rezumat</div>
+      <div class="sumg">
+        ${[['Mașina',`${esc(car.brand)} ${esc(car.model)}`],['An',esc(car.year)||'—'],['Combustibil',esc(car.fuel)||'—'],['Număr',esc(car.plate)||'—'],['Km actuali',curKm()?curKm()+' km':'—'],['Ultimul service',lastKm?lastKm+' km':'—'],['Cost service',svcCost.toFixed(0)+' RON'],['Cost combustibil',fuelCost.toFixed(0)+' RON'],['Alte cheltuieli',expCost.toFixed(0)+' RON'],['TOTAL',`${(svcCost+fuelCost+expCost).toFixed(0)} RON`],['Consum mediu',cons?cons.medConsum+' L/100km':'—'],['Alimentări',fuels.length]].map(([k,v])=>`<div class="sumi"><div class="sumk">${k}</div><div class="sumv">${v}</div></div>`).join('')}
+      </div>
+    </div>`;
+}
+
+let carT;
+function saveCar(){
+  car={brand:$('c-brand').value,model:$('c-model').value,year:$('c-year').value,km:$('c-km').value,fuel:$('c-fuel').value,plate:$('c-plate').value,vin:$('c-vin').value,tank:$('c-tank').value};
+  clearTimeout(carT);carT=setTimeout(()=>{save();renderCar();},700);
+}
+
+// ── EXPORT ────────────────────────────────────────────────────────────
+function saveDriveUrl(){driveUrl=$('drv-url').value;save();}
+
+function q(s){return '"'+String(s==null?'':s).replace(/"/g,'""')+'"';}
+function buildCSV(){
+  const c=`${car.brand} ${car.model} ${car.year}`;
+  const rows=['Tip,Data,Km,Categorie,Descriere,Litri,Cost RON,Status/Statie,Masina'];
+  svcs.forEach(r=>rows.push([q('Service'),q(fmtDate(r.date)),q(r.km),q(r.category),q(r.desc),q(''),q(r.cost),q((r.urgency||'')+(r.shop?' - '+r.shop:'')),q(c)].join(',')));
+  fuels.forEach(f=>rows.push([q('Alimentare'),q(fmtDate(f.date)),q(f.km),q(f.tip),q(f.nota),q(f.litri),q(f.cost),q(f.stat),q(c)].join(',')));
+  exps.forEach(e=>rows.push([q('Cheltuiala'),q(fmtDate(e.date)),q(''),q(e.cat),q(e.desc),q(''),q(e.cost),q('Scad:'+(e.scad?fmtDate(e.scad):'')),q(c)].join(',')));
+  return rows.join('\n');
+}
+
+async function expDrive(){
+  if(!driveUrl){toast('⚠️ Adaugă URL Apps Script!');return;}
+  toast('⏳ Trimit...');
+  try{await fetch(driveUrl,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'data='+encodeURIComponent(buildCSV()),mode:'no-cors'});toast('✅ Trimis pe Drive!');}
+  catch(e){toast('❌ Eroare');}
+}
+
+function expCSV(){
+  const a=document.createElement('a');
+  // BOM ca Excel să afișeze corect diacriticele
+  a.href=URL.createObjectURL(new Blob(['\ufeff'+buildCSV()],{type:'text/csv;charset=utf-8;'}));
+  a.download=`MecanicVirtual_${localISO(new Date())}.csv`;
+  a.click();toast('✅ CSV descărcat!');
+}
+
+// ── BACKUP / RESTORE ──────────────────────────────────────────────────
+function buildJSON(){
+  return JSON.stringify({version:2,exportDate:new Date().toISOString(),car,svcs,fuels,exps,rems:rems.filter(r=>!r.auto),customCats},null,2);
+}
+
+function backupLocal(){
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([buildJSON()],{type:'application/json'}));
+  a.download=`MecanicBackup_${localISO(new Date())}.json`;
+  a.click();
+  lastBackup=new Date().toISOString();
+  save();renderDash();renderSet();
+  toast('✅ Backup descărcat!');
+}
+
+function backupAndOpenDrive(){
+  backupLocal();
+  setTimeout(()=>{window.open('https://drive.google.com','_blank');toast('📂 Urcă fișierul JSON în Drive!');},1000);
+}
+
+// ── NOTIFICĂRI ────────────────────────────────────────────────────────
+function notifSupported(){return 'Notification' in window;}
+function renderNotifStatus(){
+  const el=$('notif-status');if(!el)return;
+  if(!notifSupported()){el.textContent='Browserul nu suportă notificări.';el.style.color='#fbbf24';return;}
+  const p=Notification.permission;
+  el.textContent=p==='granted'?'✅ Notificări active':p==='denied'?'⛔ Blocate în setările browserului':'Neactivate încă';
+  el.style.color=p==='granted'?'#4ade80':p==='denied'?'#f87171':'#94a3b8';
+}
+async function enableNotif(){
+  if(!notifSupported()){toast('⚠️ Browserul nu suportă notificări');return;}
+  let p=Notification.permission;
+  if(p==='default')p=await Notification.requestPermission();
+  renderNotifStatus();
+  if(p==='granted'){toast('✅ Notificări activate');notifyDue(true);}
+  else toast('⚠️ Notificările sunt blocate');
+}
+async function notifyDue(force){
+  if(!notifSupported()||Notification.permission!=='granted')return;
+  const due=rems.filter(r=>!r.done&&remStatus(r).cls!=='ok');
+  if(!due.length)return;
+  const sig=localISO(new Date())+'|'+due.map(r=>r.id).join(',');
+  let last='';try{last=localStorage.getItem('mv_notif')||'';}catch(e){}
+  if(!force&&last===sig)return;
+  try{localStorage.setItem('mv_notif',sig);}catch(e){}
+  const title='🔧 Mecanic Virtual — '+due.length+(due.length>1?' remindere':' reminder');
+  const body=due.slice(0,4).map(r=>r.title+': '+remStatus(r).txt.replace(/^[^A-Za-zĂÂÎȘȚăâîșț0-9]+/,'')).join('\n');
+  try{
+    const reg=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration();
+    if(reg)await reg.showNotification(title,{body,icon:'icon-192.png',tag:'mv-due'});
+    else new Notification(title,{body,icon:'icon-192.png'});
+  }catch(e){try{new Notification(title,{body});}catch(_){}}
+}
+
+function renderSet(){
+  renderNotifStatus();
+  const el=$('bk-status');
+  const days=bkDays();
+  if(days===null){el.textContent='⚠️ Niciun backup făcut încă.';el.style.color='#fbbf24';}
+  else{el.textContent=`Ultimul backup: ${agoTxt(days)} (${fmtDate(localISO(new Date(lastBackup)))})`;el.style.color=days>=BK_DAYS?'#fbbf24':'#4ade80';}
+}
+
+function normList(a){
+  return a.filter(x=>x&&typeof x==='object').map((x,i)=>({...x,id:Number(x.id)||(Date.now()+i)}));
+}
+
+function importBackup(){
+  const file=$('import-file').files[0];
+  if(!file){toast('⚠️ Selectează un fișier JSON!');return;}
+  if(!confirm('⚠️ Datele existente vor fi înlocuite. Continui?'))return;
+  const reader=new FileReader();
+  reader.onload=(e)=>{
+    try{
+      const d=JSON.parse(e.target.result);
+      if(!d||typeof d!=='object'||!(d.car||d.svcs||d.fuels||d.exps))throw new Error('format');
+      if(d.car&&typeof d.car==='object')car=Object.assign({brand:'',model:'',year:'',km:'',fuel:'',plate:'',vin:'',tank:''},d.car);
+      if(Array.isArray(d.svcs))svcs=normList(d.svcs);
+      if(Array.isArray(d.fuels))fuels=normList(d.fuels);
+      if(Array.isArray(d.exps))exps=normList(d.exps);
+      if(Array.isArray(d.rems))rems=normList(d.rems).filter(r=>!r.auto);
+      if(Array.isArray(d.customCats))customCats=d.customCats.map(String);
+      syncKm();save();buildCatSelect();renderDash();
+      toast('✅ Date restaurate cu succes!');
+      $('import-file').value='';
+    }catch(err){toast('❌ Fișier invalid!');}
+  };
+  reader.readAsText(file);
+}
+
+function resetAll(){
+  if(!confirm('⚠️ Ștergi TOATE datele?'))return;
+  if(!confirm('Ești sigur? Fă backup mai întâi!'))return;
+  car={brand:'',model:'',year:'',km:'',fuel:'',plate:'',vin:'',tank:''};
+  svcs=[];fuels=[];exps=[];rems=[];customCats=[];
+  save();buildCatSelect();renderDash();toast('🗑️ Date șterse');
+}
+
+// ── AUTOCOMPLETE ─────────────────────────────────────────────────────
+function uniqSorted(arr){
+  const seen=new Map();
+  arr.map(x=>(x||'').trim()).filter(Boolean).forEach(x=>{const k=x.toLowerCase();if(!seen.has(k))seen.set(k,x);});
+  return [...seen.values()].sort((a,b)=>a.toLowerCase().localeCompare(b.toLowerCase()));
+}
+function getFuelStations(){return uniqSorted(fuels.map(f=>f.stat));}
+function getShops(){return uniqSorted(svcs.map(r=>r.shop));}
+
+function acShow(inputId,listId,items){
+  const inp=$(inputId);
+  const list=$(listId);
+  const val=(inp.value||'').toLowerCase().trim();
+  const filtered=val?items.filter(x=>x.toLowerCase().includes(val)):items;
+  if(!filtered.length){acHide(listId);return;}
+  list.innerHTML=filtered.map(x=>
+    `<div class="autocomplete-item" data-val="${esc(x)}" onmousedown="acPick('${inputId}','${listId}',this.dataset.val)">${esc(x)}</div>`
+  ).join('');
+  list.classList.add('open');
+}
+function acHide(listId){const l=$(listId);if(l)l.classList.remove('open');}
+function acPick(inputId,listId,val){$(inputId).value=val;acHide(listId);}
+
+// ── INIT ──────────────────────────────────────────────────────────────
+load();
+buildExpCatSelect();
+buildCatSelect();
+buildRepCats();
+renderDash();
+$('svc-pan').addEventListener('input',nextPreview);
+$('svc-pan').addEventListener('change',nextPreview);
+notifyDue();
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){renderDash();notifyDue();}});
+setTodayVal('sv');setTodayVal('ff');setTodayVal('ex');
+$('rep-quick').value='month';setRepPeriod();
+
+// Cere browserului să nu șteargă datele locale (util mai ales pe iPhone)
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();}catch(e){}
+
+// Service worker real (fișier separat sw.js) — merge doar pe http(s), nu pe file://
+if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0){
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>
